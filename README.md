@@ -27,6 +27,9 @@ parámetro en los llamados de autenticación.
 
 # Proceso de autenticación
 
+![Flujo de autenticación](https://github.com/FCFM-ADI/upasaporte-server-demo/blob/master/assets/flow_es.png "Flujo de autenticación")
+
+
 1. Cuando un USUARIO necesita ser autenticado, el servidor EXTERNO debe desplegar
 el formulario de U-Pasaporte. Eso puede realizarse de dos maneras:
 
