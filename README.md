@@ -86,7 +86,7 @@ en cada llamado válido se envía una firma que debe ser verificada utilizando l
 del servidor ```www.u-cursos.cl``` alojado en ```https://www.u-cursos.cl/upasaporte/certificado```.
 Para verificar la firma se deben concatenar todos los valores del POST ordenados por su llave.
 Por ejemplo, si llegan los siguientes valores:
-```param2=value3&param1=value2&param0=value1``` se debe verificar la firma con los datos ```value1value2value3```
+```param2=value3&param1=value1&param0=value2``` se debe verificar la firma con los datos ```value2value1value3```
 
 ```PHP
 $signature = base64_decode( $_POST['firma'] );
