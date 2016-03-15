@@ -15,7 +15,6 @@ usuarios son almacenadas en tablas de LOG.
 * USUARIO: el browser del usuario que quiere autenticarse.
 
 
--------------------------------------------------------
 ## Instalación
 
 Los desarrolladores que deseen utilizar U-Pasaporte deben solicitar acceso a ADI.
@@ -146,12 +145,9 @@ entonces desplegará el mensaje o URL de redirección que genera el servicio.
 
 # Estilo de formulario incrustado
 
-Es posible personalizar el formulario de acceso a traves de hojas de estilo
-CSS. El formulario esta cubierto por un tag <DIV> con id 'upasaporte' para
-este fin.
+Es posible personalizar el formulario de acceso a traves de hojas de estilo CSS. El formulario esta cubierto por un tag <DIV> con id 'upasaporte' para este fin.
 
-Sin embargo, esta prohibido utilizar hojas de estilo o javascript para ocultar
-parcial o totalmente los objetos entregados por ADI.
+Sin embargo, esta prohibido utilizar hojas de estilo o javascript para ocultar parcial o totalmente los objetos entregados por ADI.
 
 
 # Contacto
