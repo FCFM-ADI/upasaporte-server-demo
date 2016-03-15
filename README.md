@@ -30,23 +30,22 @@ parámetro en los llamados de autenticación.
 1. Cuando un USUARIO necesita ser autenticado, el servidor EXTERNO debe desplegar
 el formulario de U-Pasaporte. Eso puede realizarse de dos maneras:
 
-* Formulario incrustado: el formulario se puede mostrar como parte del sitio EXTERNO
-utilizando el código
+	* Botón de login: se puede desplegar el butón "Entrar con U-Pasaporte" utilizando el siguiente código
+	
+	```
+	<script language="JavaScript" src="https://www.u-cursos.cl/upasaporte/javascript?servicio=NOMBRE_SERVICIO"></script>
+	```
+	
+	Donde ```NOMBRE_SERVICIO``` debe reemplazarse por el identificador único entregado por ADI.
+	
+	* Formulario externo: En algunos casos, como en móviles, es más util enviar al usuario al servicio de U-Pasaporte, para ello debe
+	redigir la navegación a la URL
+	
+	```
+	https://www.u-cursos.cl/upasaporte/login?servicio=NOMBRE_SERVICIO
+	```
 
-```
-<script language="JavaScript" src="https://www.u-cursos.cl/upasaporte/javascript?servicio=NOMBRE_SERVICIO"></script>
-```
-
-Donde ```NOMBRE_SERVICIO``` debe reemplazarse por el identificador único entregado por ADI.
-
-* Formulario externo: En algunos casos, como en móviles, es más util enviar al usuario al servicio de U-Pasaporte, para ello debe
-rerigir la navegación a la URL
-
-```
-https://www.u-cursos.cl/upasaporte/login?servicio=NOMBRE_SERVICIO
-```
-
-Donde ```NOMBRE_SERVICIO``` debe reemplazarse por el identificador único entregado por ADI.
+	Donde ```NOMBRE_SERVICIO``` debe reemplazarse por el identificador único entregado por ADI.
 
 2. El USUARIO ingresará sus credenciales en el formulario y la información se validará
 por ADI.
@@ -129,7 +128,7 @@ exit("No tiene permisos para acceder a este servicio");
 
 # DEBUG
 
-Tanto con el código incrustado como con la URL directa a U-Pasaporte, es posible incluir
+Tanto con el código que genera el botón de ingreso como con la URL directa a U-Pasaporte, es posible incluir
 el parámetro de ```debug``` en la URL, de este modo se activa el modo de desarrollo, el cual
 despliega la información intercambiada entre los servidores para facilitar la integración.
 
@@ -142,12 +141,6 @@ el servicio de autenticación en EXTERNO, además imprime toda la información d
 * debug=2
 Cuando el usuario ingresa sus credenciales y éstas son correctas, U-Pasaporte se comunicará con el servicio EXTERNO y
 entonces desplegará el mensaje o URL de redirección que genera el servicio.
-
-# Estilo de formulario incrustado
-
-Es posible personalizar el formulario de acceso a traves de hojas de estilo CSS. El formulario esta cubierto por un tag <DIV> con id 'upasaporte' para este fin.
-
-Sin embargo, esta prohibido utilizar hojas de estilo o javascript para ocultar parcial o totalmente los objetos entregados por ADI.
 
 
 # Contacto
