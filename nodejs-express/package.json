@@ -1,0 +1,17 @@
+{
+  "name": "upasaporte-external-demo",
+  "version": "1.0.0",
+  "description": "NodeJS U-Pasaporte demo",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ADI - FCFM - Universidad de Chile",
+  "license": "MIT"
+}
