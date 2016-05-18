@@ -54,10 +54,13 @@ el formulario de U-Pasaporte. Eso puede realizarse de dos maneras:
 por ADI.
 
 3. En caso de error de autenticación, el mismo servicio U-Pasaporte entregará información al usuario, sin indicarlo al EXTERNO.
-En caso de éxito, U-Pasaporte invocará por POST la URL de autenticación definida en el servidor EXTERNO, enviando la información del usuario como parámetros.
+En caso de éxito, U-Pasaporte invocará por POST la URL de autenticación definida en el servidor EXTERNO, enviando un ticket para la obtención de información del usuario.
 
-4. En este momento el servidor EXTERNO tiene seguridad que el usuario fue correctamente autenticado. En esta fase pueden realizarse
-las verificaciones y filtrajes adicionales que desee implementar el servicio EXTERNO. Es posible detener el flujo autenticación en esta fase.
+4. En este momento el servidor EXTERNO tiene seguridad que el usuario fue correctamente autenticado pero deben extraerse los datos del usuario a partir del ticket entregado. Para ello debe realizarse una consulta al sitio de U-Pasaporte utilizando como parametros el servicio y el ticket:
+	```
+	https://www.u-cursos.cl/upasaporte/?servicio=NOMBRE_SERVICIO&ticket=TICKET_RECIBIDO
+	```
+Luego de esta fase pueden realizarse las verificaciones y filtrajes adicionales que desee implementar el servicio EXTERNO. Es posible detener el flujo de autenticación en esta fase.
 Más detalles de las tareas que debe realizar la URL del EXTERNO más abajo.
 
 5. Una vez que el EXTERNO acepta la autenticación, puede generar una sesión en su servidor y transmitirla al usuario.
@@ -71,7 +74,7 @@ con la sesión creada.
 
 En el paso 3. del proceso de autenticación, se indica que una vez validado el usuario,
 se delega el flujo a la URL de autenticación que se entregó cuando se configuró el servicio.
-Esta URL debe realizar algunos pasos de verificación y luego puede implementar la lógica
+Esta URL debe realizar algunos pasos de obtención de datos y luego puede implementar la lógica
 que considere necesaria.
 Los ejemplos de este documento están implementados en PHP,
 pero este servicio puede estar implementado en el lenguaje de programación de preferencia del servidor EXTERNO.
@@ -79,31 +82,29 @@ pero este servicio puede estar implementado en el lenguaje de programación de p
 En este repositorio incluiremos demostraciones en distintos lenguajes.
 Aceptamos pull requests para aumentar la lista de implementaciones.
 
-## Paso 1: Verificación del origen
+## Paso 1: Obtención de datos
 
-La URL solo debe aceptar llamados originados desde ADI por medio del método POST, para ello
-en cada llamado válido se envía una firma que debe ser verificada utilizando la llave pública
-del servidor ```www.u-cursos.cl``` alojado en ```https://www.u-cursos.cl/upasaporte/certificado```.
-Para verificar la firma se deben concatenar todos los valores del POST ordenados por su llave.
-Por ejemplo, si llegan los siguientes valores:
-```param2=value3&param1=value1&param0=value2``` se debe verificar la firma con los datos ```value2value1value3```
+U-Pasaporte, al delegar el flujo mediante una consulta POST hacia EXTERNO, envia un parametro "ticket". Este ticket sirve para la obtención de los datos del usuario y debe ser enviado en conjunto con el nombre de servicio en una consulta a la url ```https://www.u-cursos.cl/upasaporte/```. El resultado de esta consulta puede resultar en un error y puede ser debido a que el ticket ya no es valido. Si la consulta es realizada correctamente se retornan los datos del usuario en formato JSON (http://www.json.org/json-es.html) y por ende deben ser parseados.
 
 ```PHP
-$signature = base64_decode( $_POST['firma'] );
-unset( $_POST['firma'] );
-$public_key = openssl_pkey_get_public( file_get_contents( 'https://www.u-cursos.cl/upasaporte/certificado' ) );
-$result     = openssl_verify( array_reduce( $_POST, create_function( '$a,$b', 'return $a.$b;' ) ), $signature, $public_key );
-openssl_free_key( $public_key );
-// if $result is false, the message is NOT coming from U-Pasaporte, we need to abort.
-if( ! $result ) exit( '-1' );
+if( ! $_POST['ticket'] ) exit( -1 );
+
+$url = 'https://www.u-cursos.cl/upasaporte/';
+$servicio = 'NOMBRE_DEL_SERVICIO';
+$json = file_get_contents( "$url?servicio=$servicio&ticket=".$_POST['ticket'] );
+if( ! $json ) exit( -1 );
+
+$datos = json_decode( $json, TRUE );
+
 ```
+
 ## Paso 2: Lógica personalizada
 
-Si la verificación de servidor es exitosa, el servicio ya puede ejecutar la lógica
+Si la obtención de datos es exitosa, el servicio ya puede ejecutar la lógica
 que requiera para finalizar la inicialización de sesión. Es responsabilidad de este servicio
 el comprobar que el usuario tenga acceso en su servidor.
 
-Dentro del los parámetros del llamado POST se entrega información sobre el usuario autenticado.
+Dentro del los parámetros del arreglo de datos se entrega información sobre el usuario autenticado.
 **IMPORTANTE:
 La informacion que se envia es de caracter no privado, pero debe mantenerse
 reservada (no publicar). Algunos de los valores enviados se refieren a los
@@ -118,7 +119,7 @@ que se envie un ID de session valido como parte de la URL.
 ```PHP
 session_start();
 $_SESSION = array(
-	'nombre_completo'	=> $_POST['nombre_completo'],
+	'nombre_completo'	=> $datos['nombre_completo'],
 	'valido'			=> TRUE,
 );
 //You need to finalise the script redirecting the user to your redirect URL
