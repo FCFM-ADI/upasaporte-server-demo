@@ -4,7 +4,7 @@ const https = require('https');
 const uid = require('uid-safe').sync;
 var REDIRECT_URL;
 var CONTENT_PROVIDER_URL='https://www.u-cursos.cl/upasaporte/?';
-var APP_NAME='demo';
+var APP_NAME='demo';//Replace with yout own app name
 /*
 For demo purposes, you should use more sofisticated means to
 store cookes.
@@ -19,6 +19,11 @@ app.use(bodyParser.urlencoded({
 //We define the route to receive the EXTERNAL authenticator
 //called by U-Pasaporte
 app.post('/external', function(req,res){
+  if(!req.body['ticket']){
+    res.statusCode = 400;
+    res.end();
+    return;
+  }
   var url = CONTENT_PROVIDER_URL+'servicio='+APP_NAME+'&ticket='+req.body['ticket'];
   https.get(url, function(r){
     var data = "";
@@ -27,6 +32,7 @@ app.post('/external', function(req,res){
     });
     r.on('end', function() {
       if(r.statusCode != 200){
+        res.statusCode = 500;
         res.send("Surgió un error finalizando la autenticación. Si el problema persiste, contáctese a soporte.");
         return;
       }
@@ -43,6 +49,7 @@ app.post('/external', function(req,res){
 			res.send(redirect);
     });
     r.on('error', function(){
+      res.statusCode = 500;
       res.send("Surgió un error finalizando la autenticación. Si el problema persiste, contáctese a soporte.");
     });
   });
