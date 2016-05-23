@@ -8,7 +8,7 @@ class UpasaporteController < ApplicationController
   @@SESSIONS = {} #In production you should use a better session system than this one in
   def external
     data = Net::HTTP.get(URI(sprintf(DATA_PROVIDER, params[:ticket])))
-    if not data or not data['pers_id']
+    if not data or data.length <= 2
       render :text => 'error', :status => 400
       return
     end
