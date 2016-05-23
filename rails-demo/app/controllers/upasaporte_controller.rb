@@ -9,7 +9,7 @@ class UpasaporteController < ApplicationController
   def external
     data = Net::HTTP.get(URI(sprintf(DATA_PROVIDER, params[:ticket])))
     if not data or data.length <= 2
-      render :text => 'error', :status => 400
+      render :text => 'Surgió un error ', :status => 400
       return
     end
     uuid = SecureRandom.uuid;
