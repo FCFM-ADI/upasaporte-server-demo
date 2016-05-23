@@ -1,0 +1,6 @@
+<h1>Hola <%= @user_data['alias'] %> </h1>
+
+<h2>Datos recibidos</h2>
+<pre>
+<%= JSON.pretty_generate(@user_data) %>
+</pre>

@@ -1,0 +1,25 @@
+require 'SecureRandom'
+require 'net/http'
+require 'json'
+
+class UpasaporteController < ApplicationController
+  DATA_PROVIDER = 'https://www.u-cursos.cl/upasaporte/?servicio=demo&ticket=%s'
+  REDIRECT_URL = 'http://172.17.85.108:3000/upasaporte/authenticated?sessid='
+  @@SESSIONS = {} #In production you should use a better session system than this one in
+  def external
+    data = Net::HTTP.get(URI(sprintf(DATA_PROVIDER, params[:ticket])))
+    uuid = SecureRandom.uuid;
+    @@SESSIONS[uuid] = data;
+    redirect_url = REDIRECT_URL+uuid
+    render text: redirect_url
+  end
+
+  def authenticated
+    raw_data = @@SESSIONS[params[:sessid]]
+    if not @user_data
+      render :text => 'error', :status => 400
+      return
+    end
+    @user_data = JSON.parse(raw_data)
+  end
+end
