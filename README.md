@@ -1,26 +1,26 @@
 # Sistema de autenticación de usuarios U-Pasaporte
 
-Este sistema valida las credenciales de un usuario con los servidores de ADI. Puede ser
+Este sistema valida las credenciales de un usuario con los servidores del Centro Tecnológico Ucampus. Puede ser
 utilizado por desarrolladores externos para validar usuarios sin requerir la administración de claves.
 
-**ATENCIÓN** Cualquier servicio externo a ADI que utilice este KIT de autenticación
+**ATENCIÓN** Cualquier servicio externo a Centro Tecnológico Ucampus que utilice este KIT de autenticación
 queda sujeto a las normas de Escuela de Ingeniería y Ciencias. Cualquier mal
 uso de este KIT será sancionado. Todas las acciones realizadas por los
 usuarios son almacenadas en tablas de LOG.
 
 ## Actores
 
-* ADI:  servidor de ADI 'www.u-cursos.cl/upasaporte'
+* ADI:  servidor de Ucampus 'www.u-cursos.cl/upasaporte'
 * EXTERNO: servidor externo, servicio que utilizará U-Pasaporte para autenticar a sus usuarios.
 * USUARIO: el browser del usuario que quiere autenticarse.
 
 
 ## Instalación
 
-Los desarrolladores que deseen utilizar U-Pasaporte deben solicitar acceso a ADI.
+Los desarrolladores que deseen utilizar U-Pasaporte deben solicitar acceso al Centro Tecnológico Ucampus.
 Deben proveer de una URL de autenticación en el servidor EXTERNO y el nombre del servicio que utilizará U-Pasaporte.
 
-Una vez aceptada la solicitud ADI configurará el acceso y entregará
+Una vez aceptada la solicitud, el Centro Tecnológico Ucampus configurará el acceso y entregará
 un identificador de servicio. Este identificador se debe utilizar como
 parámetro en los llamados de autenticación.
 
@@ -39,7 +39,7 @@ el formulario de U-Pasaporte. Eso puede realizarse de dos maneras:
 	<script language="JavaScript" src="https://www.u-cursos.cl/upasaporte/javascript?servicio=NOMBRE_SERVICIO"></script>
 	```
 	
-	Donde ```NOMBRE_SERVICIO``` debe reemplazarse por el identificador único entregado por ADI.
+	Donde ```NOMBRE_SERVICIO``` debe reemplazarse por el identificador único entregado por el Centro Tecnológico Ucampus.
 	
 	* Formulario externo: En algunos casos, como en móviles, es más util enviar al usuario al servicio de U-Pasaporte, para ello debe
 	redigir la navegación a la URL
@@ -48,10 +48,10 @@ el formulario de U-Pasaporte. Eso puede realizarse de dos maneras:
 	https://www.u-cursos.cl/upasaporte/login?servicio=NOMBRE_SERVICIO
 	```
 
-	Donde ```NOMBRE_SERVICIO``` debe reemplazarse por el identificador único entregado por ADI.
+	Donde ```NOMBRE_SERVICIO``` debe reemplazarse por el identificador único entregado por el Centro Tecnológico Ucampus.
 
 2. El USUARIO ingresará sus credenciales en el formulario y la información se validará
-por ADI.
+por el Centro Tecnológico Ucampus.
 
 3. En caso de error de autenticación, el mismo servicio U-Pasaporte entregará información al usuario, sin indicarlo al EXTERNO.
 En caso de éxito, U-Pasaporte invocará por POST la URL de autenticación definida en el servidor EXTERNO, enviando un ticket para la obtención de información del usuario.
